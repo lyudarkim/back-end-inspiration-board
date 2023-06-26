@@ -11,3 +11,11 @@ class Board(db.Model):
             "title": self.title,
             "owner": self.owner
         }
+    
+    @classmethod
+    def from_dict(cls, board_details):
+        new_board = cls(
+            title=board_details["title"],
+            owner=board_details["owner"]
+        )
+        return new_board
