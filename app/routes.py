@@ -39,6 +39,10 @@ def create_board():
 
 
 # Read one board
+@boards_bp.route("/<board_id>", methods=['GET'])
+def get_one_board(board_id):
+    board = get_valid_item_by_id(Board, board_id)
+    return board.to_dict(), 200
 
 
 # Get all cards
