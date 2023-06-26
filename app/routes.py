@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify, make_response, abort
 from app import db
 
 from app.models.board import Board
@@ -6,6 +6,18 @@ from app.models.board import Board
 
 boards_bp = Blueprint('boards', __name__, url_prefix="/boards")
 cards_bp = Blueprint('cards', __name__, url_prefix="/cards")
+
+# Helper function:
+def get_valid_item_by_id(model, board_id):
+    try:
+        board_id = int(board_id)
+    except:
+        abort(make_response({'msg': f"Invalid board_id '{board_id}'"}, 400))
+
+    item = model.query.get(board_id)
+
+    return item if item else abort(make_response({'msg': f"No {model.__name__} with board_id {board_id}"}, 404))
+
 
 # Read all boards
 @boards_bp.route("", methods=['GET'])
