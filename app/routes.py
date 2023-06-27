@@ -8,15 +8,15 @@ boards_bp = Blueprint('boards', __name__, url_prefix="/boards")
 cards_bp = Blueprint('cards', __name__, url_prefix="/cards")
 
 # Helper function:
-def get_valid_item_by_id(model, board_id):
+def get_valid_item_by_id(model, id):
     try:
-        board_id = int(board_id)
+        id = int(id)
     except:
-        abort(make_response({'msg': f"Invalid board_id '{board_id}'"}, 400))
+        abort(make_response({'msg': f"Invalid id '{id}'"}, 400))
 
-    item = model.query.get(board_id)
+    item = model.query.get(id)
 
-    return item if item else abort(make_response({'msg': f"No {model.__name__} with board_id {board_id}"}, 404))
+    return item if item else abort(make_response({'msg': f"No {model.__name__} with id {id}"}, 404))
 
 
 # Read all boards
@@ -88,5 +88,12 @@ def create_card():
     }, 201
 
 # Delete a card
+@cards_bp.route("/<card_id>", methods=["DELETE"])
+def delete_one_card(card_id):
+    card_to_delete = get_valid_item_by_id(Card, card_id)
 
+    db.session.delete(card_to_delete)
+    db.session.commit()
+
+    return f"Card {card_to_delete.message} is deleted!", 200
 
