@@ -72,7 +72,20 @@ def get_cards():
     return jsonify(cards_response), 200
 
 # Create a card
+@cards_bp.route("",methods=['POST'])
+def create_card():
+    request_body = request.get_json()
+    new_card = Card.from_dict(request_body)
 
+    db.session.add(new_card)
+    db.session.commit()
+
+    return {
+        "card_id": new_card.card_id,
+        "message": new_card.message,
+        "likes_count": new_card.likes_count,
+        "msg": "Successfully created"
+    }, 201
 
 # Delete a card
 
