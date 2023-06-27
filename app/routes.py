@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, make_response, abort
 from app import db
 
 from app.models.board import Board
-# from app.models.card import Card
+from app.models.card import Card
 
 boards_bp = Blueprint('boards', __name__, url_prefix="/boards")
 cards_bp = Blueprint('cards', __name__, url_prefix="/cards")
@@ -58,9 +58,21 @@ def get_one_board(board_id):
 
 
 # Get all cards
+@cards_bp.route("", methods=['GET'])
+def get_cards():
+    message_query = request.args.get("message")
+    if message_query:
+        cards = Card.query.filter_by(message=message_query)
+    else:
+        cards = Card.query.all()
 
+    cards_response = []
+    for card in cards:
+        cards_response.append(card.to_dict())
+    return jsonify(cards_response), 200
 
 # Create a card
+
 
 # Delete a card
 
