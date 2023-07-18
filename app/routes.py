@@ -71,6 +71,18 @@ def get_cards():
         cards_response.append(card.to_dict())
     return jsonify(cards_response), 200
 
+
+@boards_bp.route("/<board_id>/cards", methods=['GET'])
+def get_cards_for_one_board(board_id):
+    board = get_valid_item_by_id(Board, board_id)
+
+    cards = [card.to_dict() for card in board.cards]
+    board_dict = board.to_dict()
+
+    board_dict["cards"] = cards
+
+    return board_dict, 200
+
 # Create a card
 @cards_bp.route("",methods=['POST'])
 def create_card():
