@@ -64,7 +64,7 @@ def delete_one_board(board_id):
     db.session.delete(board_to_delete)
     db.session.commit()
 
-    return f"Board {board_to_delete.message} is deleted!", 200
+    return f"Board {board_to_delete.title} is deleted!", 200
 
 
 # Get all cards
